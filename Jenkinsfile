@@ -57,34 +57,29 @@ pipeline
             }
             
         }
+      stage('PushtoDTR') {
+                    steps {
+                        //  bat "docker tag i-tanishakapoor-master dtr.nagarro.com:443/i-tanishakapoor-master:${BUILD_NUMBER}"
+                        //  bat "docker push dtr.nagarro.com:443/i-tanishakapoor-master:${BUILD_NUMBER}"
+                    }
+        }
+        stage('Stop Running Container') {
+                     steps {
+                        script {
+                            containerID = powershell(returnStdout: true, script:'docker ps -af name=^"c-tanishakapoor-master" --format "{{.ID}}"')
+                            if (containerID) {
+                                bat "docker stop ${containerID}"
+                                bat "docker rm -f ${containerID}"
+                            }
+                        }
+                    }
+            }
 
-        // stage('Containers') {
-        //     parallel {
-        //         stage('PrecontainerCheck') {
-        //             steps {
-        //                 script {
-        //                     containerID = powershell(returnStdout: true, script:'docker ps -af name=^"c-tanishakapoor-master" --format "{{.ID}}"')
-        //                     if (containerID) {
-        //                         bat "docker stop ${containerID}"
-        //                         bat "docker rm -f ${containerID}"
-        //                     }
-        //                 }
-        //             }
-        //         }
-        //         stage('PushtoDTR') {
-        //             steps {
-        //                  bat "docker tag i-tanishakapoor-master dtr.nagarro.com:443/i-tanishakapoor-master:${BUILD_NUMBER}"
-        //                  bat "docker push dtr.nagarro.com:443/i-tanishakapoor-master:${BUILD_NUMBER}"
-        //             }
-        //         }
-        //     }
-        // }
-
-        // stage('Docker deployment') {
-        //         steps {
-        //         bat "docker run -d -p 6200:80 --name c-tanishakapoor-master dtr.nagarro.com:443/i-tanishakapoor-master:${BUILD_NUMBER}"
-        //         }
-        // }
+        stage('Docker deployment') {
+                steps {
+                bat "docker run -d -p 6000:80 --name c-tanishakapoor-master i-tanishakapoor-master"
+                }
+        }
 
         
             stage('Helm chart Deployment') {
