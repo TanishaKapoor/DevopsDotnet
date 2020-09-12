@@ -57,12 +57,12 @@ pipeline
             }
             
         }
-      stage('PushtoDTR') {
-                    steps {
-                        //  bat "docker tag i-tanishakapoor-master dtr.nagarro.com:443/i-tanishakapoor-master:${BUILD_NUMBER}"
-                        //  bat "docker push dtr.nagarro.com:443/i-tanishakapoor-master:${BUILD_NUMBER}"
-                    }
-        }
+    //   stage('PushtoDTR') {
+    //                 steps {
+    //                     //  bat "docker tag i-tanishakapoor-master dtr.nagarro.com:443/i-tanishakapoor-master:${BUILD_NUMBER}"
+    //                     //  bat "docker push dtr.nagarro.com:443/i-tanishakapoor-master:${BUILD_NUMBER}"
+    //                 }
+    //     }
         stage('Stop Running Container') {
                      steps {
                         script {
