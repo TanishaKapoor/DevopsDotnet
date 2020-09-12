@@ -42,7 +42,7 @@ pipeline
         stage('Stop sonarqube analysis') {
             steps {
                 withSonarQubeEnv('Test_Sonar') {
-                    bat "dotnet ${scannerHome}/SonarScanner.MsBuild.dll end"
+                    bat "dotnet \"${scannerHome}/SonarScanner.MsBuild.dll\" end"
                 }
             }
         }
