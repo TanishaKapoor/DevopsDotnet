@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{.Values.deployment.name}}
+  labels:
+    app: {{.Values.label}}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{.Values.label}}
+  template:
+    metadata:
+      labels:
+        app: {{.Values.label}}
+    spec:
+      terminationGracePeriodSeconds: 1
+      containers:
+      - name: {{.Values.containers.name}}
+        image: {{.Values.image.repository}}:{{.Values.image.tag}}
+        ports:
+        - containerPort: {{.Values.deployment.port}}

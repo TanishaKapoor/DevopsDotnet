@@ -1,0 +1,5 @@
+user.name= Tanisha Kapoor 
+user.employeeid= 3147226
+user.emailid= tanisha.kapoor@nagarro.com
+user.type= dotnet
+user.batch= junior

@@ -28,7 +28,7 @@ pipeline
         stage('Start sonarqube analysis') {
             steps {
                 withSonarQubeEnv('Test_Sonar') {
-                        bat "dotnet \"${scannerHome}/SonarScanner.MsBuild.dll\" begin /k:${env.SonarQube_Project_Name}   /n:${env.SonarQube_Project_Name} /v:${env.SonarQube_Version}"
+                        bat "dotnet \"${scannerHome}/SonarScanner.MsBuild.dll\" begin /k:${env.SonarQube_Project_Key}   /n:${env.SonarQube_Project_Name} /v:${env.SonarQube_Version}"
                 }
             }
         }
@@ -57,12 +57,12 @@ pipeline
             }
             
         }
-    //   stage('PushtoDTR') {
-    //                 steps {
-    //                     //  bat "docker tag i-tanishakapoor-master dtr.nagarro.com:443/i-tanishakapoor-master:${BUILD_NUMBER}"
-    //                     //  bat "docker push dtr.nagarro.com:443/i-tanishakapoor-master:${BUILD_NUMBER}"
-    //                 }
-    //     }
+      stage('PushtoDTR') {
+                    steps {
+                         bat "docker tag i-tanishakapoor-master dtr.nagarro.com:443/i-tanishakapoor-master"
+                         bat "docker push dtr.nagarro.com:443/i-tanishakapoor-master"
+                    }
+        }
         stage('Stop Running Container') {
                      steps {
                         script {
@@ -83,14 +83,8 @@ pipeline
 
         
             stage('Helm chart Deployment') {
-                steps {   
-                    script {
-                        namespace = powershell(returnStdout: true, script:'kubectl get ns ns-tanishakapoor-master  -o=custom-columns=NAME:.metadata.name --ignore-not-found')
-                        if(!namespace){
-                             bat "kubectl create ns ns-tanishakapoor-master"
-                        }
-                    }
-                            bat "helm upgrade tanishakapoor-master-chart ./helmchart --install -n ns-tanishakapoor-master --set image.tag=${BUILD_NUMBER}"
+                steps {  
+                            bat "helm upgrade tanishakapoor-master-chart ./helmchart --install"
                       }
                     
             }
